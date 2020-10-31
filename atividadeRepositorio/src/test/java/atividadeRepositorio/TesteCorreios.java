@@ -51,4 +51,20 @@ public class TesteCorreios {
 		assertEquals(msg, "Rua Guiratinga - de 611/612 ao fim");
 	}
 
+	@When("^digitar o (\\d+)-(\\d+)$")
+	public void digitar_o(String arg1, String arg2) throws Throwable {
+		Thread.sleep(2000);
+		driver.findElement(By.id("acesso-busca")).sendKeys(arg1, arg2);
+	}
+
+	@Then("^validar \"([^\"]*)\"$")
+	public void validar(String arg1) throws Throwable {
+		ArrayList<String> abas = new ArrayList<>(driver.getWindowHandles());
+		driver.switchTo().window(abas.get(1));
+		Thread.sleep(6000);
+		String msg = driver.findElement(By.xpath("//*[@id=\"resultado-DNEC\"]/tbody/tr/td[1]")).getText();
+		assertEquals(msg, arg1);
+		driver.quit();
+	}
+
 }
