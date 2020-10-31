@@ -30,35 +30,20 @@ public class TesteCorreios {
 		driver.get("https://www.correios.com.br");
 	}
 
-	@When("^digitar o cep$")
-	public void digitar_o_cep() throws Throwable {
-		Thread.sleep(5000);
-		driver.findElement(By.id("acesso-busca")).sendKeys("04141-001");
-	}
-
 	@When("^clicar em buscar$")
 	public void clicar_em_buscar() throws Throwable {
 		driver.findElement(By.id("acesso-busca")).submit();
 
 	}
 
-	@Then("^validar endereco$")
-	public void validar_endere_o() throws Throwable {
-		ArrayList<String> abas = new ArrayList<>(driver.getWindowHandles());
-		driver.switchTo().window(abas.get(1));
-		Thread.sleep(6000);
-		String msg = driver.findElement(By.xpath("//*[@id=\"resultado-DNEC\"]/tbody/tr/td[1]")).getText();
-		assertEquals(msg, "Rua Guiratinga - de 611/612 ao fim");
-	}
-
-	@When("^digitar o (\\d+)-(\\d+)$")
-	public void digitar_o(String arg1, String arg2) throws Throwable {
+	@When("^digitar o \"([^\"]*)\"$")
+	public void digitar_o(String arg1) throws Throwable {
 		Thread.sleep(2000);
-		driver.findElement(By.id("acesso-busca")).sendKeys(arg1, arg2);
+		driver.findElement(By.id("acesso-busca")).sendKeys(arg1);
 	}
 
-	@Then("^validar \"([^\"]*)\"$")
-	public void validar(String arg1) throws Throwable {
+	@Then("^validar end\"([^\"]*)\"$")
+	public void validar_end(String arg1) throws Throwable {
 		ArrayList<String> abas = new ArrayList<>(driver.getWindowHandles());
 		driver.switchTo().window(abas.get(1));
 		Thread.sleep(6000);
@@ -67,4 +52,13 @@ public class TesteCorreios {
 		driver.quit();
 	}
 
+	@Then("^validar cep\"([^\"]*)\"$")
+	public void validar_cep(String arg1) throws Throwable {
+		ArrayList<String> abas = new ArrayList<>(driver.getWindowHandles());
+		driver.switchTo().window(abas.get(1));
+		Thread.sleep(6000);
+		String msg = driver.findElement(By.xpath("//*[@id=\"resultado-DNEC\"]/tbody/tr[1]/td[4]")).getText();
+		assertEquals(msg, arg1);
+		driver.quit();
+	}
 }
